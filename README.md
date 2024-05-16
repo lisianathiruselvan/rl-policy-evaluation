@@ -1,41 +1,108 @@
 # POLICY EVALUATION
 
-## AIM:
-To evaluate and compare the performance of two policies using policy evaluation.
+## AIM
+To develop a Python program to evaluate the given policy by maximizing its cumulative reward while dealing with slippery terrain.
 
-## PROBLEM STATEMENT:
-Given a set of states, actions, and transition probabilities, we are given two policies.
+## PROBLEM STATEMENT
+We are tasked with creating an RL agent to solve the "Bandit Slippery Walk" problem.
 
-We want to evaluate the performance of the two policies by computing their state-value functions.
+1. The environment consists of Seven states representing discrete positions the agent can occupy.
 
-The policy with the higher state-value function is considered to be the better policy.
+2. The agent must learn to navigate this environment while dealing with the challenge of slippery terrain.
 
-## POLICY EVALUATION FUNCTION:
+3. Slippery terrain introduces stochasticity in the agent's actions, making it difficult to predict the outcomes of its actions accurately.
+
+### States:
+
+The environment has 7 states:
+
+Two Terminal States: G: The goal state & H: A hole state.
+Five Transition states / Non-terminal States including S: The starting state.
+
+### Actions:
+
+The agent can take two actions:
+
+R -> Move right.
+L -> Move left.
+
+### Transition Probabilities:
+
+The transition probabilities for each action are as follows:
+
+50% chance that the agent moves in the intended direction.
+33.33% chance that the agent stays in its current state.
+16.66% chance that the agent moves in the opposite direction.
+
+### Rewards:
+
+The agent receives a reward of +1 for reaching the goal state (G).                                                                      
+The agent receives a reward of 0 for all other states.
+
+## Graphical Representation:
+![graph](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/042c638c-fb4a-443a-9716-bec9dd67e904)
+
+
+## Formula:
+![image](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/3fe2db16-f484-4fed-a7d6-b91dd4fe67fe)
+
+
+
+## POLICY EVALUATION FUNCTION
+
+DEVELOPED BY: Lisiana T
+
+REGISTER NUMBER: 212222240053
+
 ```
 def policy_evaluation(pi, P, gamma=1.0, theta=1e-10):
-    prev_V=np.zeros(len(P))
+    prev_V = np.zeros(len(P), dtype=np.float64)
+# code  to evaluate the given policy
     while True:
-      V=np.zeros(len(P))
+      V=np.zeros(len(P),dtype=np.float64)
       for s in range(len(P)):
-        for prob,next_state,reward,done in P[s][pi(s)]:
-          V[s]+=prob*(reward+gamma*prev_V[next_state]*(not done))
-      if np.max(np.abs(prev_V-V)):
+        for prob, next_state, reward, done in P[s][pi(s)]:
+          V[s]+=prob*(reward+gamma+prev_V[next_state]*(not done))
+      if np.max(np.abs(prev_V-V))<theta:
         break
       prev_V=V.copy()
-    return V
+      return V
+
+# Code to evaluate the first policy
+V1 = policy_evaluation(pi_1, P,gamma=0.99)
+print_state_value_function(V1, P, n_cols=7, prec=5)
+
+# Code to evaluate the second policy
+V2 = policy_evaluation(pi_2, P)
+print_state_value_function(V2, P, n_cols=7, prec=5)
+
+# Comparing the two policies
+if(np.sum(V1>=V2)==7):
+  print("The first policy is the better policy")
+elif(np.sum(V2>=V1)==7):
+  print("The second policy is the better policy")
+else:
+  print("Both policies have their merits.")
+
 ```
+
 ## OUTPUT:
 
 ### Policy 1
-
-![image](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/ed51c1e8-c665-43cf-a093-0ffe22e71206)
+![P1](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/d30c2f56-7017-4548-8739-70cc56df7c13)
 
 
 ### Policy 2
+![P2](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/3c5ab6c2-42d4-4faf-a1ed-811ea5ff5ef4)
 
-![image](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/049553a1-f4bc-4b66-905f-57c8f7fe3dbd)
+
+
+### Comparison & Conclusion
+![C1](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/396bc858-3139-4fcc-9f03-880e0d4f8622)
+
+![C2](https://github.com/lisianathiruselvan/rl-policy-evaluation/assets/119389971/0018e9c1-b7a2-4803-8be6-b3f25d25c08c)
 
 
 ## RESULT:
 
-Thus, the evaluation and comparison of the two policies using policy evaluation has been done successfully and it is found that policy 2 is better.
+Thus the Given Policy have been Evaluated and Optimal Policy has been Computed using Python Programming.
